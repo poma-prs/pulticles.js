@@ -1,0 +1,39 @@
+.header {
+    display: block;
+    width: auto;
+    margin-right: auto;
+    margin-left: auto;
+    float: none;
+    border-style: none;
+    border-width: 0 0 1px;
+    border-color: #3779ce #3779ce #2e68b3;
+    background-color: #477dc2;
+    background-image: -webkit-linear-gradient(270deg,#fff,#fff);
+    background-image: linear-gradient(180deg,#fff,#fff);
+    color: #000;
+    font-size: 15px;
+    text-shadow: 0 1px 0 #4983cc;
+}
+
+.header-animation-canvas {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: block;
+    width: 100%;
+    border-bottom: 1px none #000;
+}
+
+#header_canvas {
+    height: 100vh !important;
+}
+
+.header-background {
+    position: static;
+    display: block;
+    height: 100vh;
+    border-bottom: 1px none #336aaf;
+    -webkit-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1);
+}

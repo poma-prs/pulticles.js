@@ -1,0 +1,20 @@
+{
+  "name": "pulse-particles",
+  "version": "0.0.1",
+  "description": "JavaScript library for creating pulse particles",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "particles",
+    "particle",
+    "canvas",
+    "pulticles"
+  ],
+  "author": "Roman Poskrebyshev",
+  "license": "MIT",
+  "files": [
+    "particles.js",
+    "particles.min.js"
+  ]
+}

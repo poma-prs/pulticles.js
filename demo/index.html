@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Pulticles Demo - JavaScript library for creating pulse particles</title>
+	<meta name="description" content="Pulticles Demo - JavaScript library for creating pulse particles">
+	<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+	<div class="header">
+ 		<div class="header-animation-canvas w-embed"><canvas id="header_canvas" style="width: 100%; height: 0px; background-blah: #477dc2; background: white;" width="1472" height="458"></canvas></div>
+		<div class="header-background"></div>
+	</div>
+	<script src="../pulticles.min.js"></script>
+	<script type="text/javascript">
+		Pulticles(document.getElementById('header_canvas'), {
+			edgeLightUpSpeed: 0.002,
+			edgeFadeSpeed: 0.001,
+			edgeLightUpBrightness: 0.2,
+			eraseAlpha: 0.5,
+			trailSize: 25,
+			pulseChance: 0.06,
+			maxPulsesPerSpawn: 1,
+			maxPulses: 50,
+			minVertexRadius: 1,
+			minPulseSpeed: 0.03 / 2.25,
+			pulseSpeedVariation: 0.04 / 2.25,
+			vertexRadiusVariation: 1,
+			spacing: 80,
+			bg: [255, 255, 255],
+			fg: [128, 198, 255],
+		});
+	</script>
+</body>
+</html>
