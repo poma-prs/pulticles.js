@@ -71,8 +71,9 @@
 		Pulticles(document.getElementById('header_canvas'), {
 			edgeLightUpSpeed: 0.002,
 			edgeFadeSpeed: 0.001,
-			edgeLightUpBrightness: 0.2,
-			eraseAlpha: 0.5,
+			edgeLightUpBrightness: 0.02,
+			edgeLightUpAlphaDiff: 0.02,
+			eraseAlpha: 0,
 			trailSize: 25,
 			pulseChance: 0.06,
 			maxPulsesPerSpawn: 1,
@@ -82,7 +83,6 @@
 			pulseSpeedVariation: 0.04 / 2.25,
 			vertexRadiusVariation: 1,
 			spacing: 80,
-			bg: [43, 50, 58],
 			fg: [128, 198, 255],
 		});
 

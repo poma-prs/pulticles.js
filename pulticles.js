@@ -30,6 +30,7 @@
         edgeLightUpSpeed: .002,
         edgeFadeSpeed: .001,
         edgeLightUpBrightness: .2,
+        edgeLightUpAlphaSpeed: .02,
         eraseAlpha: .5,
         trailSize: 25,
         pulseChance: .06,
@@ -166,7 +167,7 @@
             var pulse = new Pulse(origin, dest);
             pulse.speed = options.minPulseSpeed + options.pulseSpeedVariation * Math.random();
             if (diagram.pulses.length < options.maxPulses) {
-                //origin.lightUp();
+                origin.lightUp();
                 diagram.pulses.push(pulse);
                 var edge = origin.diagram.edges.find(function(edge) {
                     return edge.va == origin && edge.vb == dest || edge.vb == origin && edge.va == dest
@@ -187,19 +188,34 @@
         diagram.edges.forEach(function(edge) {
             edge.color = 0;
             edge.colorTo = 0;
+            edge.alpha = 0;
+            edge.alphaTo = 1;
             edge.lightUp = function() {
                 edge.colorTo = options.edgeLightUpBrightness;
                 edge.color = Math.max(edge.color, 1e-4)
+                edge.alpha = 0;
+                edge.alphaTo = 1;
             };
             edge.update = function() {
-                if (edge.colorTo > 0) {
+                if (edge.alpha < edge.alphaTo) {
+                    edge.alpha += options.edgeLightUpAlphaSpeed;
+                }
+                if (edge.alphaTo > 0) {
+                    edge.alphaTo -= options.edgeLightUpAlphaSpeed;
+                } else {
+                    edge.alpha -= options.edgeLightUpAlphaSpeed;
+                }
+                /*if (edge.alphaTo > 0) {
+                    edge.alphaTo -= 0.002;
+                }*/
+                /*if (edge.colorTo > 0) {
                     edge.color += options.edgeLightUpSpeed;
                     edge.colorTo -= options.edgeLightUpSpeed;
                     if (edge.colorTo < 0) edge.colorTo = 0
                 } else if (edge.color > 0) {
                     edge.color -= options.edgeFadeSpeed;
                     if (edge.color < 0) edge.color = 0
-                }
+                }*/
             }
         })
     }
@@ -346,7 +362,7 @@
                 if (newPulses == 0 || failedPulses >= newPulses) {
                     this.dest.blip();
                     lastBliped = [this.dest].concat(lastBliped.slice(0, 20));
-                    //this.dest.lightUp();
+                    this.dest.lightUp();
                     forceStrength = 7.5 + this.dest.depth * 6
                 }
                 var dx = this.dest.x - this.origin.x;
@@ -386,7 +402,7 @@
     function drawDiagram(diagram, ctx, width, height, delta) {
         if (Math.random() < options.pulseChance) {
             repeat(Math.random() * options.maxPulsesPerSpawn, function(i) {
-                var origin = diagram.outerVertices[Math.round(Math.random() * (diagram.outerVertices.length - 1))];
+                var origin = diagram.vertices[Math.round(Math.random() * (diagram.vertices.length - 1))];
                 var dest = origin.getRandomNeighbor();
                 if (lastBliped.length > 0 && (dest == null || Math.random() < .1)) {
                     origin = lastBliped[Math.round(Math.random() * (lastBliped.length - 1))];
@@ -402,6 +418,7 @@
                 }
             })
         }
+        ctx.clearRect(0, 0, width, height);
         ctx.fillStyle = getColor(0);
         ctx.globalAlpha = options.eraseAlpha;
         ctx.fillRect(0, 0, width, height);
@@ -411,14 +428,15 @@
         ctx.lineCap = "round";
         diagram.edges.forEach(function(edge) {
             if (edge.color <= 0) return;
+            edge.update();
+            if (edge.alpha <= 0) return;
             ctx.beginPath();
             ctx.moveTo(edge.va.x * dpi, edge.va.y * dpi);
             ctx.lineTo(edge.vb.x * dpi, edge.vb.y * dpi);
             ctx.strokeStyle = getColor(edge.color);
-            ctx.globalAlpha = 1;
+            ctx.globalAlpha = edge.alpha;
             ctx.lineWidth = 1 * dpi;
             ctx.stroke();
-            edge.update()
         });
         diagram.pulses.forEach(function(pulse) {
             var pos = pulse.getPos();
@@ -457,7 +475,6 @@
                 ctx.globalAlpha = 1 - (1 - depth) * .35;
                 fillCircle(ctx, vertex.x, vertex.y, vertex.radius)
             }
-                fillCircle(ctx, vertex.x, vertex.y, vertex.radius)
             vertex.blips.forEach(function(blip) {
                 var iblip = 1 - blip;
                 var blipRadius = vertex.radius + vertex.blipRadius * Math.pow(iblip, 1 / 2);
